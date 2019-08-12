@@ -119,7 +119,7 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
   }
 
   alterAssetTags(htmlPluginData) {
-    const bodyTags = htmlPluginData.assetTags.scripts.map((scriptTag) => {
+    const scripts = htmlPluginData.assetTags.scripts.map((scriptTag) => {
       const { attributes } = scriptTag
       const isLegacy = this.isLegacy(attributes)
       return {
@@ -131,7 +131,9 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
       };
     });
 
-    return Promise.resolve(Object.assign(htmlPluginData, { bodyTags }));
+    Object.assign(htmlPluginData.assetTags, { scripts })
+
+    return Promise.resolve(htmlPluginData);
   }
 }
 
