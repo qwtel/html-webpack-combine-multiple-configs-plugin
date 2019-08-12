@@ -27,15 +27,13 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
    */
   static alterTags = false;
 
-  /** 
-   * If `alterTags` is true, scripts that contain this string will receive the `nomodule` tag.
-   */
-  static legacyPrefix = 'legacy';
+  static legacyTest = /legacy/gi;
 
-  /**
-   * Same as `legacyPrefix`.
-   */
-  static legacySuffix = 'legacy';
+  /** @deprecated */
+  static legacyPrefix?: string
+
+  /** @deprecated */
+  static legacySuffix?: string
   
   private group: Group;
 
@@ -107,12 +105,23 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
     });
   }
 
+  isLegacy(attributes: { src: string }) {
+    const { legacyTest, legacyPrefix, legacySuffix } = HtmlWebpackCombineMultipleConfigsPlugin
+
+    // Keep supporting old behavior. 
+    // Note that this contains a bug where it wouldn't match if the suffix was provided in uppercase...
+    if (legacyPrefix || legacySuffix) {
+      const src = attributes.src.toLowerCase()
+      return src.includes(legacyPrefix) || src.includes(legacySuffix)
+    }
+
+    return legacyTest.test(attributes.src)
+  }
+
   alterAssetTags(htmlPluginData) {
     const bodyTags = htmlPluginData.assetTags.scripts.map((scriptTag) => {
       const { attributes } = scriptTag
-      const { legacyPrefix, legacySuffix } = HtmlWebpackCombineMultipleConfigsPlugin
-      const src = attributes.src.toLowerCase()
-      const isLegacy = src.includes(legacyPrefix) || src.includes(legacySuffix)
+      const isLegacy = this.isLegacy(attributes)
       return {
         ...scriptTag,
         attributes: {
