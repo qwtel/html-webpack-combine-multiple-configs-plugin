@@ -111,8 +111,11 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
     // Keep supporting old behavior. 
     // Note that this contains a bug where it wouldn't match if the suffix was provided in uppercase...
     if (legacyPrefix || legacySuffix) {
-      const src = attributes.src.toLowerCase()
-      return src.includes(legacyPrefix) || src.includes(legacySuffix)
+      const src = attributes.src.toLowerCase();
+      return (
+        (legacyPrefix && src.includes(legacyPrefix.toLowerCase())) || 
+        (legacySuffix && src.includes(legacySuffix.toLowerCase()))
+      );
     }
 
     return new RegExp(legacyTest).test(attributes.src);
