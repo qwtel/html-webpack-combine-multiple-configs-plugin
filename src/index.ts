@@ -115,7 +115,7 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
       return src.includes(legacyPrefix) || src.includes(legacySuffix)
     }
 
-    return legacyTest.test(attributes.src)
+    return new RegExp(legacyTest).test(attributes.src);
   }
 
   alterAssetTags(htmlPluginData) {
