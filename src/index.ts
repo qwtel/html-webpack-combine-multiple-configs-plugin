@@ -23,12 +23,17 @@ const flat = <T>(arr: T[][]): T[] => [].concat(...arr);
 class HtmlWebpackCombineMultipleConfigsPlugin {
   /**
    * Set to true if you want to alter script tags to include 
-   * `type="module"` and `nomodule` attributes based on `legacySuffix`.
+   * `type="module"` and `nomodule` attributes based on `legacyPrefix`.
    */
   static alterTags = false;
 
   /** 
    * If `alterTags` is true, scripts that contain this string will receive the `nomodule` tag.
+   */
+  static legacyPrefix = 'legacy';
+
+  /**
+   * Same as `legacyPrefix`.
    */
   static legacySuffix = 'legacy';
   
@@ -105,7 +110,9 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
   alterAssetTags(htmlPluginData) {
     const bodyTags = htmlPluginData.assetTags.scripts.map((scriptTag) => {
       const { attributes } = scriptTag
-      const isLegacy = attributes.src.toLowerCase().includes(HtmlWebpackCombineMultipleConfigsPlugin.legacySuffix)
+      const { legacyPrefix, legacySuffix } = HtmlWebpackCombineMultipleConfigsPlugin
+      const src = attributes.src.toLowerCase()
+      const isLegacy = src.includes(legacyPrefix) || src.includes(legacySuffix)
       return {
         ...scriptTag,
         attributes: {

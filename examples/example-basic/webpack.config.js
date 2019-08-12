@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackCombineMultipleConfigsPlugin = require('../..')
 
 HtmlWebpackCombineMultipleConfigsPlugin.alterTags = true
-HtmlWebpackCombineMultipleConfigsPlugin.legacySuffix = 'legacy'
+HtmlWebpackCombineMultipleConfigsPlugin.legacyPrefix = 'legacy'
 
 // Make sure each config has its own instance!
 // Do not share plugin instances between configs!
