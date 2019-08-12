@@ -38,8 +38,5 @@
     "esmodules",
     "html-webpack-plugin"
   ],
-  "bugs": {
-    "url": "https://github.com/qwtel/html-webpack-combine-multiple-configs-plugin/issues"
-  },
   "homepage": "https://github.com/qwtel/html-webpack-combine-multiple-configs-plugin#readme"
 }
