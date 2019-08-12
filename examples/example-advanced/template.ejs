@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Example</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= htmlWebpackPlugin.tags.headTags %>
+</head>
+
+<body>
+  <script type="module">
+    window.__ESM__ = true;
+    <%= htmlWebpackPlugin.tags.bodyTags
+      .map(tag => tag.attributes.src)
+      .filter(src => !src.includes('legacy'))
+      .map(src => `import './${src}';`)
+      .join('\n') %>
+  </script>
+
+  <script noscript>
+    !(function (document) {
+      function loadScript(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        document.head.appendChild(script);
+      }
+      window.onload = function () {
+        if (!window.__ESM__) {
+          <%= htmlWebpackPlugin.tags.bodyTags
+            .map(tag => tag.attributes.src)
+            .filter(src => src.includes('legacy'))
+            .map(src => `loadScript('./${src}');`)
+            .join('\n') %>
+        }
+      };
+    }(document))
+  </script>
+</body>
+
+</html>

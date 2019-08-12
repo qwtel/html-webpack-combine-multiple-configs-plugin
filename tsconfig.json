@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "types" : ["node"],
+    "lib": ["es2015"],
+    "target": "es2015",
+    "module": "commonjs",
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "downlevelIteration": true,
+    "outDir": ".",
+  },
+  "include": [
+    "src/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+  ],
+}

@@ -1,0 +1,45 @@
+{
+  "name": "html-webpack-combine-multiple-configs-plugin",
+  "version": "1.0.0",
+  "description": "This plugin allows script assets from multiple webpack configs to be injected into the same HTML template.",
+  "main": "index.js",
+  "files": [
+    "index*"
+  ],
+  "dependencies": {
+    "webpack": ">= 4",
+    "html-webpack-plugin": ">= 4.0.0-beta.8"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.1",
+    "typescript": "^3.5.3"
+  },
+  "scripts": {
+    "build": "tsc -d",
+    "prepack": "npm run build"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "author": "Florian Klampfer <mail@qwtel.com> (https://qwtel.com/)",
+  "license": "MIT",
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qwtel/html-webpack-combine-multiple-configs-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "babel",
+    "babel-env",
+    "esmodules",
+    "html-webpack-plugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/qwtel/html-webpack-combine-multiple-configs-plugin/issues"
+  },
+  "homepage": "https://github.com/qwtel/html-webpack-combine-multiple-configs-plugin#readme"
+}

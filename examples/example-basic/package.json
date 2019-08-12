@@ -1,0 +1,17 @@
+{
+  "name": "example",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "webpack --mode development"
+  },
+  "author": "Florian Klampfer <mail@qwtel.com> (https://qwtel.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "html-webpack-plugin": "^4.0.0-beta.8",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  }
+}
