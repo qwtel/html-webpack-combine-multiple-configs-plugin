@@ -66,6 +66,7 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
   }
 
   compilation(compilation) {
+    // FIXME: Find better way to determine the number of HtmlWebpack compilations.
     if (compilation.compiler.name === 'HtmlWebpackCompiler') {
       if (this.group.has(this)) {
         throw Error(`
@@ -77,6 +78,7 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
     }
 
     // Getting the HtmlWebpackPlugin instance form the plugins array for... reasons.
+    // FIXME: Better way of dealing with potentially multiple versions of `HtmlWebpackPlugin`?
     const plugin = (compilation.compiler.options.plugins || [])
       .find(p => p.constructor && p.constructor.name === 'HtmlWebpackPlugin');
 
@@ -115,26 +117,10 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
     });
   }
 
-  isLegacy(attributes: { src: string }) {
-    const { legacyTest, legacyPrefix, legacySuffix } = this.options;
-
-    // Keep supporting old behavior. 
-    // Note that this contains a bug where it wouldn't match if the suffix was provided in uppercase...
-    if (legacyPrefix || legacySuffix) {
-      const src = attributes.src.toLowerCase();
-      return (
-        (legacyPrefix && src.includes(legacyPrefix.toLowerCase())) || 
-        (legacySuffix && src.includes(legacySuffix.toLowerCase()))
-      );
-    }
-
-    return new RegExp(legacyTest).test(attributes.src);
-  }
-
   alterAssetTags(htmlPluginData) {
     const scripts = htmlPluginData.assetTags.scripts.map((scriptTag) => {
-      const { attributes } = scriptTag
-      const isLegacy = this.isLegacy(attributes)
+      const { attributes } = scriptTag;
+      const isLegacy = this.isLegacy(attributes);
       return {
         ...scriptTag,
         attributes: {
@@ -147,6 +133,21 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
     Object.assign(htmlPluginData.assetTags, { scripts })
 
     return Promise.resolve(htmlPluginData);
+  }
+
+  protected isLegacy(attributes: { src: string }) {
+    const { legacyTest, legacyPrefix, legacySuffix } = this.options;
+
+    // Keep supporting old behavior. 
+    if (legacyPrefix || legacySuffix) {
+      const src = attributes.src.toLowerCase();
+      return (
+        (legacyPrefix && src.includes(legacyPrefix.toLowerCase())) || 
+        (legacySuffix && src.includes(legacySuffix.toLowerCase()))
+      );
+    }
+
+    return new RegExp(legacyTest).test(attributes.src);
   }
 }
 
