@@ -2,9 +2,6 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackCombineMultipleConfigsPlugin = require('../..')
 
-HtmlWebpackCombineMultipleConfigsPlugin.alterTags = true;
-HtmlWebpackCombineMultipleConfigsPlugin.legacyTest = /legacy/gi;
-
 // Make sure each config has its own instance!
 // Do not share plugin instances between configs!
 const createSharedPlugins = (filename = 'index.html') => [
@@ -19,7 +16,10 @@ const createSharedPlugins = (filename = 'index.html') => [
       minifyURLs: false,
     },
   }),
-  new HtmlWebpackCombineMultipleConfigsPlugin(),
+  new HtmlWebpackCombineMultipleConfigsPlugin({
+    alterTags: true,
+    legacyTest: /legacy/gi,
+  }),
 ]
 
 module.exports = [

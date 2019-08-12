@@ -1,6 +1,9 @@
-interface ResolvablePromise<T> extends Promise<T> {
-  resolve: (value: T) => void;
-  reject: (error: Error) => void;
+export interface HtmlWebpackCombineMultipleConfigsPluginOptions {
+  groupId?: any;
+  alterTags?: boolean;
+  legacyTest?: RegExp;
+  legacyPrefix?: string;
+  legacySuffix?: string;
 }
 
 type Assets = { js: string[] };
@@ -8,6 +11,7 @@ type Group = Map<HtmlWebpackCombineMultipleConfigsPlugin, ResolvablePromise<Asse
 
 const defaultGroupId = Symbol('defaultGroupId');
 const groups = new Map<any, Group>();
+const optionsByGroup = new Map<any, HtmlWebpackCombineMultipleConfigsPluginOptions>();
 
 // YMNN_
 const uniq = <T>(arr: T[]): T[] => [...new Set(arr)];
@@ -36,12 +40,18 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
   static legacySuffix?: string
   
   private group: Group;
+  private options: HtmlWebpackCombineMultipleConfigsPluginOptions;
 
-  constructor({ groupId = defaultGroupId }: { groupId?: any } = {}) {
-    if (!groups.get(groupId)) {
+  constructor(options: HtmlWebpackCombineMultipleConfigsPluginOptions = {}) {
+    const { groupId = defaultGroupId } = options;
+
+    if (!groups.has(groupId)) {
       groups.set(groupId, new Map());
+      optionsByGroup.set(groupId, { ...HtmlWebpackCombineMultipleConfigsPlugin, ...options });
     }
+
     this.group = groups.get(groupId);
+    this.options = optionsByGroup.get(groupId);
   }
 
   apply(compiler) {
@@ -73,7 +83,7 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
     if (plugin && plugin.constructor && plugin.constructor.getHooks) {
       const hooks = plugin.constructor.getHooks(compilation);
       hooks.beforeAssetTagGeneration.tapPromise(this.constructor.name, this.beforeAssetTagGeneration.bind(this));
-      if (HtmlWebpackCombineMultipleConfigsPlugin.alterTags) {
+      if (this.options.alterTags) {
         hooks.alterAssetTags.tapPromise(this.constructor.name, this.alterAssetTags.bind(this));
       }
     } else {
@@ -106,7 +116,7 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
   }
 
   isLegacy(attributes: { src: string }) {
-    const { legacyTest, legacyPrefix, legacySuffix } = HtmlWebpackCombineMultipleConfigsPlugin
+    const { legacyTest, legacyPrefix, legacySuffix } = this.options;
 
     // Keep supporting old behavior. 
     // Note that this contains a bug where it wouldn't match if the suffix was provided in uppercase...
@@ -138,6 +148,11 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
 
     return Promise.resolve(htmlPluginData);
   }
+}
+
+interface ResolvablePromise<T> extends Promise<T> {
+  resolve: (value: T) => void;
+  reject: (error: Error) => void;
 }
 
 function resolvablePromise<T>(): ResolvablePromise<T> {
