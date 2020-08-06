@@ -1,4 +1,4 @@
-export interface HtmlWebpackCombineMultipleConfigsPluginOptions {
+type HtmlWebpackCombineMultipleConfigsPluginOptions = {
   groupId?: any;
   alterTags?: boolean;
   legacyTest?: RegExp;
@@ -149,6 +149,8 @@ class HtmlWebpackCombineMultipleConfigsPlugin {
 
     return new RegExp(legacyTest).test(attributes.src);
   }
+
+  static HtmlWebpackCombineMultipleConfigsPlugin = HtmlWebpackCombineMultipleConfigsPlugin;
 }
 
 interface ResolvablePromise<T> extends Promise<T> {
@@ -167,5 +169,4 @@ function resolvablePromise<T>(): ResolvablePromise<T> {
   return p;
 }
 
-module.exports = HtmlWebpackCombineMultipleConfigsPlugin;
-module.exports.HtmlWebpackCombineMultipleConfigsPlugin = HtmlWebpackCombineMultipleConfigsPlugin;
+export = HtmlWebpackCombineMultipleConfigsPlugin;
