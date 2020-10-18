@@ -40,9 +40,7 @@ module.exports = [
 ```
 
 ## Compatibility
-It was tested against `html-webpack-plugin@4.0.0-beta.8` AND ONLY `html-webpack-plugin@4.0.0-beta.8`, so it will probably be broken by the time you want to use it, because in the webpack ecosystem changing public APIs is like getting a new pair of Cheap Monday skinny jeans... something you do every 6 months. 
-
-Joking aside, the webpack ecosystem really is built by 3rd-rate hipster hackers who care more about sexy APIs than not breaking builds for thousands of companies and causing millions of $$$ to be wasted on upgrading to the latest, soon-to-be-deprecated way of calling foobar. If you have a choice, you shouldn't be using either webpack or this plugin.
+This library was tested against `html-webpack-plugin@4.0.0-beta.8` only. Buyer beware.
 
 ## Footnotes
 
